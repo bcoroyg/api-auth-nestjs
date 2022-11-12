@@ -32,4 +32,9 @@ export class UsersService {
     const createdUser = await this.usersRepository.save(newUser);
     return createdUser;
   }
+
+  async getUserByEmail(email: string): Promise<UserEntity> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    return user;
+  }
 }
