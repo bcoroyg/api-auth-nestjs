@@ -9,12 +9,12 @@ import { UserEntity } from '../entities';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
-  async createUser(user: CreateUserDto): Promise<void> {
-    const { name, email, password } = user;
-
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const createdUser = this.create({ name, email, password: hashedPassword });
+  async createUser(
+    name: string,
+    email: string,
+    password: string,
+  ): Promise<void> {
+    const createdUser = this.create({ name, email, password });
     try {
       await this.save(createdUser);
     } catch (error) {
