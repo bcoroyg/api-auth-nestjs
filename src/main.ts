@@ -12,6 +12,7 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   const port = parseInt(config.get<string>(PORT), 10);
 
+  //Validation Pipe
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

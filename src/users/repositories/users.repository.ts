@@ -3,6 +3,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../dtos';
 import { UserEntity } from '../entities';
 
@@ -10,7 +11,10 @@ import { UserEntity } from '../entities';
 export class UsersRepository extends Repository<UserEntity> {
   async createUser(user: CreateUserDto): Promise<void> {
     const { name, email, password } = user;
-    const createdUser = this.create({ name, email, password });
+
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const createdUser = this.create({ name, email, password: hashedPassword });
     try {
       await this.save(createdUser);
     } catch (error) {
