@@ -22,9 +22,12 @@ export class UserEntity {
   @Column({ type: 'boolean', default: false })
   active: boolean;
 
+  @Column({ type: 'uuid', unique: true, name: 'activation_token' })
+  activationToken: string;
+
   /* @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date; */
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 }
