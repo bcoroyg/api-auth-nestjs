@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { v4 } from 'uuid';
 
 import { CreateUserDto } from '../dtos';
 import { UserEntity } from '../entities';
@@ -23,11 +24,11 @@ export class UsersService {
     return createdUser; */
     const { name, email, password } = user;
     const hashedPassword = await this.encoderService.encodePassword(password);
-
     const newUser = this.usersRepository.create({
       name,
       email,
       password: hashedPassword,
+      activationToken: v4(),
     });
     const createdUser = await this.usersRepository.save(newUser);
     return createdUser;
