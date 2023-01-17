@@ -36,7 +36,16 @@ export class UsersRepository extends Repository<UserEntity> {
   }
 
   async getUserByEmail(email: string): Promise<UserEntity> {
-    return await this.findOne({ where: { email } });
+    // principio Tell, Don’t Ask es una tautología sobre la Programación Orientada a Objetos.
+    // Una redundancia del propio concepto de la orientación a objetos en forma de frase que debemos
+    // recordar a la hora de desarrollar.
+    const user: UserEntity = await this.findOne({ where: { email } });
+
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+
+    return user;
   }
 
   async getUserById(userId: string): Promise<UserEntity> {

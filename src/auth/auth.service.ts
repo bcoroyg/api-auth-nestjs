@@ -4,6 +4,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { v4 } from 'uuid';
 import { UserEntity } from 'src/users/entities';
 import { UsersRepository } from 'src/users/repositories';
 import { EncoderService } from 'src/users/services';
@@ -20,12 +21,9 @@ export class AuthService {
 
   async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
     const { email, password } = loginDto;
-    const user = await this.usersRepository.getUserByEmail(email);
+    const user: UserEntity = await this.usersRepository.getUserByEmail(email);
 
-    if (
-      user &&
-      (await this.encoderService.validatePassword(password, user.password))
-    ) {
+    if (await this.encoderService.validatePassword(password, user.password)) {
       const payload: IJwtPayload = { id: user.id, email, active: user.active };
       const accessToken = this.jwtService.sign(payload);
 
@@ -51,5 +49,12 @@ export class AuthService {
 
   async requestResetPassword(
     requestResetPasswordDto: RequestResetPasswordDto,
-  ): Promise<void> {}
+  ): Promise<void> {
+    const { email } = requestResetPasswordDto;
+
+    const user: UserEntity = await this.usersRepository.getUserByEmail(email);
+    user.resetPasswordToken = v4();
+    this.usersRepository.save(user);
+    // Send email(e.g. Dispatch an event so MailerModule can send the email)
+  }
 }
