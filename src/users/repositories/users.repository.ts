@@ -69,6 +69,18 @@ export class UsersRepository extends Repository<UserEntity> {
       where: { id: id, activationToken: code, active: false },
     });
   }
+
+  async findOneByResetPasswordToken(
+    resetPasswordToken: string,
+  ): Promise<UserEntity> {
+    const user: UserEntity = await this.findOne({
+      where: { resetPasswordToken },
+    });
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
+  }
 }
 
 /* @Injectable()

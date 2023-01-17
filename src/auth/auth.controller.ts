@@ -1,6 +1,11 @@
 import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ActivateUserDto, LoginDto, RequestResetPasswordDto } from './dtos';
+import {
+  ActivateUserDto,
+  LoginDto,
+  RequestResetPasswordDto,
+  ResetPasswordDto,
+} from './dtos';
 
 @Controller('api/v1/auth')
 export class AuthController {
@@ -21,5 +26,10 @@ export class AuthController {
     @Body() requestResetPasswordDto: RequestResetPasswordDto,
   ): Promise<void> {
     return this.authService.requestResetPassword(requestResetPasswordDto);
+  }
+
+  @Patch('reset-password')
+  resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<void> {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 }

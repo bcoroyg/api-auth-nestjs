@@ -8,7 +8,12 @@ import { v4 } from 'uuid';
 import { UserEntity } from 'src/users/entities';
 import { UsersRepository } from 'src/users/repositories';
 import { EncoderService } from 'src/users/services';
-import { ActivateUserDto, LoginDto, RequestResetPasswordDto } from './dtos';
+import {
+  ActivateUserDto,
+  LoginDto,
+  RequestResetPasswordDto,
+  ResetPasswordDto,
+} from './dtos';
 import { IJwtPayload } from './interfaces';
 
 @Injectable()
@@ -57,4 +62,6 @@ export class AuthService {
     this.usersRepository.save(user);
     // Send email(e.g. Dispatch an event so MailerModule can send the email)
   }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {}
 }
