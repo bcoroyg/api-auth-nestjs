@@ -63,5 +63,15 @@ export class AuthService {
     // Send email(e.g. Dispatch an event so MailerModule can send the email)
   }
 
-  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {}
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
+    const { resetPasswordToken, password } = resetPasswordDto;
+    const user: UserEntity =
+      await this.usersRepository.findOneByResetPasswordToken(
+        resetPasswordToken,
+      );
+
+    user.password = await this.encoderService.encodePassword(password);
+    user.resetPasswordToken = null;
+    this.usersRepository.save(user);
+  }
 }
