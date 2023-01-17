@@ -51,7 +51,6 @@ export class AuthController {
     @Body() changePasswordDto: ChangePasswordDto,
     @GetUser() user: UserEntity,
   ): Promise<void> {
-    const a = 1;
-    return;
+    return this.authService.changePassword(changePasswordDto, user);
   }
 }

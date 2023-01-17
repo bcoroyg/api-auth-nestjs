@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   UnauthorizedException,
   UnprocessableEntityException,
@@ -10,6 +11,7 @@ import { UsersRepository } from 'src/users/repositories';
 import { EncoderService } from 'src/users/services';
 import {
   ActivateUserDto,
+  ChangePasswordDto,
   LoginDto,
   RequestResetPasswordDto,
   ResetPasswordDto,
@@ -73,5 +75,20 @@ export class AuthService {
     user.password = await this.encoderService.encodePassword(password);
     user.resetPasswordToken = null;
     this.usersRepository.save(user);
+  }
+
+  async changePassword(
+    changePasswordDto: ChangePasswordDto,
+    user: UserEntity,
+  ): Promise<void> {
+    const { oldPassword, newPassword } = changePasswordDto;
+    if (
+      await this.encoderService.validatePassword(oldPassword, user.password)
+    ) {
+      user.password = await this.encoderService.encodePassword(newPassword);
+      this.usersRepository.save(user);
+    } else {
+      throw new BadRequestException('Old password does not match');
+    }
   }
 }
