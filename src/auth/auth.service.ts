@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from 'src/users/entities';
 import { UsersRepository } from 'src/users/repositories';
 import { EncoderService } from 'src/users/services';
-import { ActivateUserDto, LoginDto } from './dtos';
+import { ActivateUserDto, LoginDto, RequestResetPasswordDto } from './dtos';
 import { IJwtPayload } from './interfaces';
 
 @Injectable()
@@ -48,4 +48,8 @@ export class AuthService {
 
     this.usersRepository.activateUser(user);
   }
+
+  async requestResetPassword(
+    requestResetPasswordDto: RequestResetPasswordDto,
+  ): Promise<void> {}
 }

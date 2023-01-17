@@ -25,6 +25,14 @@ export class UserEntity {
   @Column({ type: 'uuid', unique: true, name: 'activation_token' })
   activationToken: string;
 
+  @Column({
+    type: 'uuid',
+    unique: true,
+    name: 'reset_password_token',
+    nullable: true,
+  })
+  resetPasswordToken: string;
+
   /* @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date; */
 
